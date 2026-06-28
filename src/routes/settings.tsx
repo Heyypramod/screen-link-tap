@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Link as MuiLink,
+  
   Stack,
   Typography,
 } from "@mui/material";
@@ -106,11 +106,12 @@ function SettingsPage() {
           </Typography>
         </GlassSurface>
 
-        <GlassSurface
+        <Box
           component="a"
           href={GITHUB_URL}
           target="_blank"
           rel="noreferrer"
+          className="glass"
           sx={{
             mt: 1.25,
             p: 2,
@@ -120,6 +121,8 @@ function SettingsPage() {
             color: "text.primary",
             textDecoration: "none",
             cursor: "pointer",
+            borderRadius: "24px",
+            border: "1px solid rgba(255,255,255,0.08)",
             "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
           }}
         >
@@ -132,7 +135,7 @@ function SettingsPage() {
               {GITHUB_URL}
             </Typography>
           </Box>
-        </GlassSurface>
+        </Box>
       </Box>
 
       <Dialog
