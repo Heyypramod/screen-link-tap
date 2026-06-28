@@ -12,6 +12,9 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "../components/ui/sonner";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { m3Theme } from "../theme/m3-theme";
+import { AppBackground } from "../components/AppBackground";
 
 function NotFoundComponent() {
   return (
