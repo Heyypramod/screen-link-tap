@@ -1,12 +1,25 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { Loader2, Radio, Tv, Trash2, Wifi } from "lucide-react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import {
+  DeleteOutlineRounded,
+  RadarRounded,
+  TvRounded,
+  WifiTetheringRounded,
+} from "@mui/icons-material";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
 import { AndroidTvRemote, type TvDevice } from "@/lib/tv-plugin";
 import { pairedDevices, type PairedDevice } from "@/lib/paired-devices";
 import { tapHaptic } from "@/lib/haptics";
+import { GlassSurface } from "@/components/GlassSurface";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,123 +82,188 @@ function DeviceListPage() {
   const nothing = paired.length === 0 && discovered.length === 0;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-md flex-col gap-6 px-5 py-8">
-        <header className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
-            <Tv className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight">TV Remote</h1>
-            <p className="text-xs text-muted-foreground">
+    <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
+      <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 4 }}>
+        <Stack direction="row" spacing={2} style={{ alignItems: "center" }} sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: "14px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "rgba(182,157,248,0.15)",
+              color: "primary.main",
+            }}
+          >
+            <TvRounded />
+          </Box>
+          <Box>
+            <Typography variant="h6">TV Remote</Typography>
+            <Typography variant="caption" color="text.secondary">
               Control Android TVs on your network
-            </p>
-          </div>
-        </header>
+            </Typography>
+          </Box>
+        </Stack>
 
         <Button
-          size="lg"
+          fullWidth
+          variant="contained"
+          color="primary"
           onClick={scan}
           disabled={scanning}
-          className="h-14 rounded-2xl text-base font-semibold"
+          startIcon={
+            scanning ? (
+              <CircularProgress size={18} color="inherit" />
+            ) : (
+              <RadarRounded />
+            )
+          }
+          sx={{ minHeight: 56, borderRadius: "20px", mb: 3, fontSize: 16 }}
         >
-          {scanning ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Scanning…
-            </>
-          ) : (
-            <>
-              <Radio className="mr-2 h-5 w-5" />
-              Scan for TVs
-            </>
-          )}
+          {scanning ? "Scanning…" : "Scan for TVs"}
         </Button>
 
         {paired.length > 0 && (
-          <section className="flex flex-col gap-2">
-            <h2 className="px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Your TVs
-            </h2>
+          <Stack spacing={1.25} sx={{ mb: 3 }}>
+            <SectionLabel>Your TVs</SectionLabel>
             {paired.map((d) => (
-              <div
+              <GlassSurface
                 key={d.host}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4"
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                }}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                  <Tv className="h-5 w-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate font-medium">{d.name}</div>
-                  <div className="truncate text-xs text-muted-foreground">
+                <Box sx={iconChipSx}>
+                  <TvRounded />
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography noWrap style={{ fontWeight: 600 }}>
+                    {d.name}
+                  </Typography>
+                  <Typography variant="caption" noWrap color="text.secondary">
                     {d.host}
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removePaired(d.host)}
+                  </Typography>
+                </Box>
+                <IconButton
                   aria-label={`Remove ${d.name}`}
+                  onClick={() => removePaired(d.host)}
+                  sx={{ color: "text.secondary" }}
                 >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                  <DeleteOutlineRounded />
+                </IconButton>
                 <Button
+                  variant="contained"
                   onClick={() => connectPaired(d)}
                   disabled={connecting === d.host}
-                  className="rounded-xl"
+                  sx={{ borderRadius: "14px", minHeight: 40 }}
                 >
                   {connecting === d.host ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <CircularProgress size={16} color="inherit" />
                   ) : (
                     "Connect"
                   )}
                 </Button>
-              </div>
+              </GlassSurface>
             ))}
-          </section>
+          </Stack>
         )}
 
         {unpaired.length > 0 && (
-          <section className="flex flex-col gap-2">
-            <h2 className="px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Found on network
-            </h2>
+          <Stack spacing={1.25} sx={{ mb: 3 }}>
+            <SectionLabel>Found on network</SectionLabel>
             {unpaired.map((d) => (
-              <button
+              <GlassSurface
                 key={d.host}
+                component="button"
                 onClick={() => {
                   tapHaptic("Light");
                   navigate({ to: "/pair/$host", params: { host: d.host } });
                 }}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left transition-colors hover:bg-accent active:bg-accent"
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  width: "100%",
+                  textAlign: "left",
+                  cursor: "pointer",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  transition: "background-color 150ms",
+                  "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
+                }}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                  <Wifi className="h-5 w-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate font-medium">{d.name}</div>
-                  <div className="truncate text-xs text-muted-foreground">
+                <Box sx={{ ...iconChipSx, color: "text.secondary", bgcolor: "rgba(255,255,255,0.06)" }}>
+                  <WifiTetheringRounded />
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography noWrap style={{ fontWeight: 600 }}>
+                    {d.name}
+                  </Typography>
+                  <Typography variant="caption" noWrap color="text.secondary">
                     {d.host}
-                  </div>
-                </div>
-                <div className="text-xs font-medium text-primary">Pair</div>
-              </button>
+                  </Typography>
+                </Box>
+                <Typography variant="caption" color="primary.main" style={{ fontWeight: 600 }}>
+                  Pair
+                </Typography>
+              </GlassSurface>
             ))}
-          </section>
+          </Stack>
         )}
 
         {nothing && !scanning && (
-          <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border p-10 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-              <Tv className="h-7 w-7" />
-            </div>
-            <div className="font-medium">No TVs yet</div>
-            <p className="max-w-[14rem] text-sm text-muted-foreground">
+          <GlassSurface
+            sx={{
+              mt: 4,
+              p: 5,
+              textAlign: "center",
+              borderStyle: "dashed",
+            }}
+          >
+            <Box sx={{ ...iconChipSx, mx: "auto", mb: 1.5, width: 56, height: 56 }}>
+              <TvRounded sx={{ fontSize: 28 }} />
+            </Box>
+            <Typography style={{ fontWeight: 600 }}>No TVs yet</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
               Make sure your TV is on and on the same Wi-Fi, then scan.
-            </p>
-          </div>
+            </Typography>
+          </GlassSurface>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
+  );
+}
+
+const iconChipSx = {
+  width: 44,
+  height: 44,
+  borderRadius: "14px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  bgcolor: "rgba(182,157,248,0.15)",
+  color: "primary.main",
+  flexShrink: 0,
+};
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <Typography
+      variant="caption"
+      sx={{
+        px: 0.5,
+        textTransform: "uppercase",
+        letterSpacing: 1.5,
+        color: "text.secondary",
+        fontWeight: 600,
+      }}
+    >
+      {children}
+    </Typography>
   );
 }

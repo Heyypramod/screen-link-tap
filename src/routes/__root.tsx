@@ -12,6 +12,9 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "../components/ui/sonner";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { m3Theme } from "../theme/m3-theme";
+import { AppBackground } from "../components/AppBackground";
 
 function NotFoundComponent() {
   return (
@@ -119,9 +122,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <Toaster theme="dark" position="top-center" />
+      <ThemeProvider theme={m3Theme}>
+        <CssBaseline />
+        <AppBackground />
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <Toaster theme="dark" position="top-center" />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

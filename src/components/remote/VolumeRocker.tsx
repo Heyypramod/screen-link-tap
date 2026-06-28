@@ -1,5 +1,11 @@
-import { Volume2, VolumeX, Plus, Minus } from "lucide-react";
-import { RemoteButton } from "./RemoteButton";
+import { Box, IconButton, LinearProgress, Typography } from "@mui/material";
+import {
+  AddRounded,
+  RemoveRounded,
+  VolumeOffRounded,
+  VolumeUpRounded,
+} from "@mui/icons-material";
+
 import { KEY } from "@/lib/keycodes";
 import { AndroidTvRemote } from "@/lib/tv-plugin";
 import { tapHaptic } from "@/lib/haptics";
@@ -13,51 +19,85 @@ interface Props {
   volume: { level: number; max: number; muted: boolean } | null;
 }
 
+const btnSx = {
+  width: 64,
+  height: 56,
+  borderRadius: "16px",
+  backgroundColor: "rgba(255,255,255,0.06)",
+  color: "text.primary",
+  "&:hover": { backgroundColor: "rgba(255,255,255,0.12)" },
+};
+
 export function VolumeRocker({ volume }: Props) {
   const pct = volume
     ? Math.round((volume.level / Math.max(volume.max, 1)) * 100)
-    : null;
+    : 0;
+
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-3">
-      <div className="flex items-center justify-between px-1 text-xs text-muted-foreground">
-        <span className="font-medium uppercase tracking-wider">Volume</span>
+    <Box
+      className="glass"
+      sx={{
+        p: 1.5,
+        borderRadius: "24px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        display: "flex",
+        flexDirection: "column",
+        gap: 1.25,
+      }}
+    >
+      <Box sx={{ display: "flex", justifyContent: "space-between", px: 0.5 }}>
+        <Typography
+          variant="caption"
+          sx={{
+            textTransform: "uppercase",
+            letterSpacing: 1.5,
+            color: "text.secondary",
+            fontWeight: 600,
+          }}
+        >
+          Volume
+        </Typography>
         {volume && (
-          <span className="tabular-nums">
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>
             {volume.muted ? "Muted" : `${pct}%`}
-          </span>
+          </Typography>
         )}
-      </div>
+      </Box>
       {volume && (
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-          <div
-            className="h-full rounded-full bg-primary transition-all"
-            style={{ width: volume.muted ? "0%" : `${pct}%` }}
-          />
-        </div>
+        <LinearProgress
+          variant="determinate"
+          value={volume.muted ? 0 : pct}
+          sx={{
+            height: 6,
+            borderRadius: 999,
+            backgroundColor: "rgba(255,255,255,0.08)",
+            "& .MuiLinearProgress-bar": { borderRadius: 999 },
+          }}
+        />
       )}
-      <div className="grid grid-cols-3 gap-2">
-        <RemoteButton
-          icon={<Minus className="h-5 w-5" />}
-          onClick={() => tap(KEY.VOLUME_DOWN)}
+      <Box sx={{ display: "flex", gap: 1.25, justifyContent: "space-between" }}>
+        <IconButton
           aria-label="Volume down"
-        />
-        <RemoteButton
-          icon={
-            volume?.muted ? (
-              <VolumeX className="h-5 w-5" />
-            ) : (
-              <Volume2 className="h-5 w-5" />
-            )
-          }
-          onClick={() => tap(KEY.VOLUME_MUTE)}
+          onClick={() => tap(KEY.VOLUME_DOWN)}
+          sx={{ ...btnSx, flex: 1 }}
+        >
+          <RemoveRounded />
+        </IconButton>
+        <IconButton
           aria-label="Mute"
-        />
-        <RemoteButton
-          icon={<Plus className="h-5 w-5" />}
-          onClick={() => tap(KEY.VOLUME_UP)}
+          onClick={() => tap(KEY.VOLUME_MUTE)}
+          sx={{ ...btnSx, flex: 1 }}
+        >
+          {volume?.muted ? <VolumeOffRounded /> : <VolumeUpRounded />}
+        </IconButton>
+        <IconButton
           aria-label="Volume up"
-        />
-      </div>
-    </div>
+          onClick={() => tap(KEY.VOLUME_UP)}
+          sx={{ ...btnSx, flex: 1 }}
+        >
+          <AddRounded />
+        </IconButton>
+      </Box>
+    </Box>
   );
 }

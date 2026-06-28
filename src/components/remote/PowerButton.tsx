@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { Power } from "lucide-react";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import { PowerSettingsNewRounded } from "@mui/icons-material";
+
 import { KEY } from "@/lib/keycodes";
 import { AndroidTvRemote } from "@/lib/tv-plugin";
 import { tapHaptic } from "@/lib/haptics";
@@ -29,33 +28,55 @@ export function PowerButton() {
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <button
-          aria-label="Power"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-destructive/40 bg-destructive/10 text-destructive transition active:scale-95"
-          onClick={() => tapHaptic("Light")}
-        >
-          <Power className="h-5 w-5" />
-        </button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Power off the TV?</AlertDialogTitle>
-          <AlertDialogDescription>
+    <>
+      <IconButton
+        aria-label="Power"
+        onClick={() => {
+          tapHaptic("Light");
+          setOpen(true);
+        }}
+        sx={{
+          width: 48,
+          height: 48,
+          borderRadius: "16px",
+          color: "error.main",
+          backgroundColor: "rgba(242, 184, 181, 0.12)",
+          border: "1px solid rgba(242,184,181,0.3)",
+          "&:hover": { backgroundColor: "rgba(242, 184, 181, 0.2)" },
+        }}
+      >
+        <PowerSettingsNewRounded />
+      </IconButton>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        slotProps={{
+          paper: {
+            className: "glass",
+            sx: { border: "1px solid rgba(255,255,255,0.1)" },
+          },
+        }}
+      >
+        <DialogTitle>Power off the TV?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
             This will send the power key to your TV.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setOpen(false)} variant="text">
+            Cancel
+          </Button>
+          <Button
             onClick={send}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            variant="contained"
+            color="error"
+            sx={{ borderRadius: "16px" }}
           >
             Power
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

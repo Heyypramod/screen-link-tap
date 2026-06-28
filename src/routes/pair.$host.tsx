@@ -1,17 +1,30 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent } from "react";
-import { ArrowLeft, Loader2, Tv } from "lucide-react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ClipboardEvent,
+  type KeyboardEvent,
+} from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { ArrowBackRounded, TvRounded } from "@mui/icons-material";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
 import { AndroidTvRemote } from "@/lib/tv-plugin";
 import { pairedDevices } from "@/lib/paired-devices";
 import { tapHaptic } from "@/lib/haptics";
+import { GlassSurface } from "@/components/GlassSurface";
 
 export const Route = createFileRoute("/pair/$host")({
-  head: () => ({
-    meta: [{ title: "Pair TV — TV Remote" }],
-  }),
+  head: () => ({ meta: [{ title: "Pair TV — TV Remote" }] }),
   component: PairPage,
 });
 
@@ -88,82 +101,120 @@ function PairPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-md flex-col gap-6 px-5 py-6">
-        <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="icon">
-            <Link to="/">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <div className="text-sm text-muted-foreground">{host}</div>
-        </div>
+    <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
+      <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 2 }}>
+        <Stack direction="row" style={{ alignItems: "center" }} spacing={1}>
+          <IconButton component={Link} to="/" aria-label="Back" sx={{ color: "text.primary" }}>
+            <ArrowBackRounded />
+          </IconButton>
+          <Typography variant="caption" color="text.secondary">
+            {host}
+          </Typography>
+        </Stack>
 
-        <div className="flex flex-col items-center gap-3 pt-6 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary">
-            <Tv className="h-7 w-7" />
-          </div>
-          <h1 className="text-2xl font-semibold tracking-tight">Pair your TV</h1>
-          <p className="max-w-xs text-sm text-muted-foreground">
+        <Stack style={{ alignItems: "center" }} spacing={1.5} sx={{ pt: 4, textAlign: "center" }}>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "rgba(182,157,248,0.15)",
+              color: "primary.main",
+            }}
+          >
+            <TvRounded sx={{ fontSize: 32 }} />
+          </Box>
+          <Typography variant="h5" style={{ fontWeight: 600 }}>
+            Pair your TV
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 280 }}>
             Look at your TV — enter the 6-digit code shown on screen.
-          </p>
-        </div>
+          </Typography>
+        </Stack>
 
-        <div className="flex justify-center gap-2 pt-4">
-          {digits.map((d, i) => (
-            <input
-              key={i}
-              ref={(el) => {
-                inputsRef.current[i] = el;
-              }}
-              value={d}
-              onChange={(e) => setDigit(i, e.target.value)}
-              onKeyDown={(e) => onKey(i, e)}
-              onPaste={onPaste}
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={1}
-              autoFocus={i === 0}
-              disabled={submitting || starting}
-              aria-label={`Digit ${i + 1}`}
-              className="h-14 w-11 rounded-xl border border-border bg-card text-center text-2xl font-semibold tabular-nums caret-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
-            />
-          ))}
-        </div>
+        <GlassSurface sx={{ p: 2, mt: 4 }}>
+          <Stack direction="row" style={{ justifyContent: "center" }} spacing={1}>
+            {digits.map((d, i) => (
+              <Box
+                key={i}
+                component="input"
+                ref={(el: HTMLInputElement | null) => {
+                  inputsRef.current[i] = el;
+                }}
+                value={d}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setDigit(i, e.target.value)
+                }
+                onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => onKey(i, e)}
+                onPaste={onPaste}
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={1}
+                autoFocus={i === 0}
+                disabled={submitting || starting}
+                aria-label={`Digit ${i + 1}`}
+                sx={{
+                  width: 44,
+                  height: 56,
+                  borderRadius: "14px",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  bgcolor: "rgba(255,255,255,0.04)",
+                  color: "text.primary",
+                  textAlign: "center",
+                  fontSize: 24,
+                  fontWeight: 600,
+                  fontVariantNumeric: "tabular-nums",
+                  outline: "none",
+                  transition: "border-color 150ms, box-shadow 150ms",
+                  caretColor: "var(--mui-palette-primary-main, #B69DF8)",
+                  "&:focus": {
+                    borderColor: "primary.main",
+                    boxShadow: "0 0 0 3px rgba(182,157,248,0.25)",
+                  },
+                  "&:disabled": { opacity: 0.5 },
+                }}
+              />
+            ))}
+          </Stack>
+        </GlassSurface>
 
-        {starting && (
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Opening pairing channel…
-          </div>
-        )}
-
-        {submitting && (
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Verifying code…
-          </div>
+        {(starting || submitting) && (
+          <Stack
+            direction="row"
+            style={{ alignItems: "center", justifyContent: "center" }}
+            spacing={1}
+            sx={{ pt: 2, color: "text.secondary" }}
+          >
+            <CircularProgress size={16} />
+            <Typography variant="body2">
+              {starting ? "Opening pairing channel…" : "Verifying code…"}
+            </Typography>
+          </Stack>
         )}
 
         {error && (
-          <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-center text-sm text-destructive">
+          <Alert severity="error" sx={{ mt: 2, borderRadius: "16px" }} variant="outlined">
             {error}
-          </div>
+          </Alert>
         )}
 
-        <div className="flex flex-col gap-2 pt-2">
+        <Stack spacing={1} sx={{ pt: 3 }}>
           <Button
+            variant="contained"
             onClick={() => submit(digits.join(""))}
             disabled={digits.some((d) => !d) || submitting}
-            className="h-12 rounded-xl"
+            sx={{ minHeight: 52, borderRadius: "16px" }}
           >
             Pair
           </Button>
-          <Button asChild variant="ghost" className="h-12 rounded-xl">
-            <Link to="/">Cancel</Link>
+          <Button component={Link} to="/" variant="text" sx={{ minHeight: 52 }}>
+            Cancel
           </Button>
-        </div>
-      </div>
-    </div>
+        </Stack>
+      </Box>
+    </Box>
   );
 }
