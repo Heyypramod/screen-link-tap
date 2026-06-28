@@ -50,9 +50,11 @@ export function PowerButton() {
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
-        PaperProps={{
-          className: "glass",
-          sx: { border: "1px solid rgba(255,255,255,0.1)" },
+        slotProps={{
+          paper: {
+            className: "glass",
+            sx: { border: "1px solid rgba(255,255,255,0.1)" },
+          },
         }}
       >
         <DialogTitle>Power off the TV?</DialogTitle>

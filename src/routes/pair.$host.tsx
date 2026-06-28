@@ -103,7 +103,7 @@ function PairPage() {
   return (
     <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
       <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 2 }}>
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack direction="row" style={{ alignItems: "center" }} spacing={1}>
           <IconButton component={Link} to="/" aria-label="Back" sx={{ color: "text.primary" }}>
             <ArrowBackRounded />
           </IconButton>
@@ -112,7 +112,7 @@ function PairPage() {
           </Typography>
         </Stack>
 
-        <Stack alignItems="center" spacing={1.5} sx={{ pt: 4, textAlign: "center" }}>
+        <Stack style={{ alignItems: "center" }} spacing={1.5} sx={{ pt: 4, textAlign: "center" }}>
           <Box
             sx={{
               width: 64,
@@ -127,7 +127,7 @@ function PairPage() {
           >
             <TvRounded sx={{ fontSize: 32 }} />
           </Box>
-          <Typography variant="h5" fontWeight={600}>
+          <Typography variant="h5" style={{ fontWeight: 600 }}>
             Pair your TV
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 280 }}>
@@ -136,7 +136,7 @@ function PairPage() {
         </Stack>
 
         <GlassSurface sx={{ p: 2, mt: 4 }}>
-          <Stack direction="row" justifyContent="center" spacing={1}>
+          <Stack direction="row" style={{ justifyContent: "center" }} spacing={1}>
             {digits.map((d, i) => (
               <Box
                 key={i}
@@ -184,8 +184,8 @@ function PairPage() {
         {(starting || submitting) && (
           <Stack
             direction="row"
-            alignItems="center"
-            justifyContent="center"
+            style={{ alignItems: "center" }}
+            style={{ justifyContent: "center" }}
             spacing={1}
             sx={{ pt: 2, color: "text.secondary" }}
           >

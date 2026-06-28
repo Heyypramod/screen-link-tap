@@ -84,7 +84,7 @@ function DeviceListPage() {
   return (
     <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
       <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 4 }}>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
+        <Stack direction="row" spacing={2} style={{ alignItems: "center" }} sx={{ mb: 3 }}>
           <Box
             sx={{
               width: 44,
@@ -142,7 +142,7 @@ function DeviceListPage() {
                   <TvRounded />
                 </Box>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography noWrap fontWeight={600}>
+                  <Typography noWrap style={{ fontWeight: 600 }}>
                     {d.name}
                   </Typography>
                   <Typography variant="caption" noWrap color="text.secondary">
@@ -201,14 +201,14 @@ function DeviceListPage() {
                   <WifiTetheringRounded />
                 </Box>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography noWrap fontWeight={600}>
+                  <Typography noWrap style={{ fontWeight: 600 }}>
                     {d.name}
                   </Typography>
                   <Typography variant="caption" noWrap color="text.secondary">
                     {d.host}
                   </Typography>
                 </Box>
-                <Typography variant="caption" color="primary.main" fontWeight={600}>
+                <Typography variant="caption" color="primary.main" style={{ fontWeight: 600 }}>
                   Pair
                 </Typography>
               </GlassSurface>
@@ -228,7 +228,7 @@ function DeviceListPage() {
             <Box sx={{ ...iconChipSx, mx: "auto", mb: 1.5, width: 56, height: 56 }}>
               <TvRounded sx={{ fontSize: 28 }} />
             </Box>
-            <Typography fontWeight={600}>No TVs yet</Typography>
+            <Typography style={{ fontWeight: 600 }}>No TVs yet</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
               Make sure your TV is on and on the same Wi-Fi, then scan.
             </Typography>
