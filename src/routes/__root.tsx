@@ -15,6 +15,7 @@ import { Toaster } from "../components/ui/sonner";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { m3Theme } from "../theme/m3-theme";
 import { AppBackground } from "../components/AppBackground";
+import { Dock } from "../components/Dock";
 
 function NotFoundComponent() {
   return (
@@ -127,6 +128,7 @@ function RootComponent() {
         <AppBackground />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <Dock />
         <Toaster theme="dark" position="top-center" />
       </ThemeProvider>
     </QueryClientProvider>

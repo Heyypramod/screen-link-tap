@@ -101,7 +101,7 @@ function PairPage() {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
+    <Box sx={{ minHeight: "100vh", color: "text.primary", pb: "96px" }}>
       <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 2 }}>
         <Stack direction="row" style={{ alignItems: "center" }} spacing={1}>
           <IconButton component={Link} to="/" aria-label="Back" sx={{ color: "text.primary" }}>

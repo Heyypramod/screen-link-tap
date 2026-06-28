@@ -82,7 +82,7 @@ function DeviceListPage() {
   const nothing = paired.length === 0 && discovered.length === 0;
 
   return (
-    <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
+    <Box sx={{ minHeight: "100vh", color: "text.primary", pb: "96px" }}>
       <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 4 }}>
         <Stack direction="row" spacing={2} style={{ alignItems: "center" }} sx={{ mb: 3 }}>
           <Box

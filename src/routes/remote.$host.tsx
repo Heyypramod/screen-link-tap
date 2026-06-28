@@ -56,7 +56,7 @@ function RemotePage() {
   }, [host, navigate]);
 
   return (
-    <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
+    <Box sx={{ minHeight: "100vh", color: "text.primary", pb: "112px" }}>
       <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 2 }}>
         <Stack direction="row" style={{ alignItems: "center" }} spacing={1.5} sx={{ mb: 2 }}>
           <IconButton

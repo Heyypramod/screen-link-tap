@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RemoteHostRouteImport } from './routes/remote.$host'
 import { Route as PairHostRouteImport } from './routes/pair.$host'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +37,47 @@ const PairHostRoute = PairHostRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/pair/$host': typeof PairHostRoute
   '/remote/$host': typeof RemoteHostRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/pair/$host': typeof PairHostRoute
   '/remote/$host': typeof RemoteHostRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/pair/$host': typeof PairHostRoute
   '/remote/$host': typeof RemoteHostRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pair/$host' | '/remote/$host'
+  fullPaths: '/' | '/settings' | '/pair/$host' | '/remote/$host'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pair/$host' | '/remote/$host'
-  id: '__root__' | '/' | '/pair/$host' | '/remote/$host'
+  to: '/' | '/settings' | '/pair/$host' | '/remote/$host'
+  id: '__root__' | '/' | '/settings' | '/pair/$host' | '/remote/$host'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SettingsRoute: typeof SettingsRoute
   PairHostRoute: typeof PairHostRoute
   RemoteHostRoute: typeof RemoteHostRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SettingsRoute: SettingsRoute,
   PairHostRoute: PairHostRoute,
   RemoteHostRoute: RemoteHostRoute,
 }
