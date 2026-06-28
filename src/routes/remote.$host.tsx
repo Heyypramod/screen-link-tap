@@ -1,21 +1,19 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { ArrowBackRounded } from "@mui/icons-material";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
 import { AndroidTvRemote, type TvEvent } from "@/lib/tv-plugin";
 import { pairedDevices } from "@/lib/paired-devices";
-import { DPad } from "@/components/remote/DPad";
+import { Touchpad } from "@/components/remote/Touchpad";
 import { TransportRow } from "@/components/remote/TransportRow";
 import { VolumeRocker } from "@/components/remote/VolumeRocker";
 import { PowerButton } from "@/components/remote/PowerButton";
 import { MoreSection } from "@/components/remote/MoreSection";
 
 export const Route = createFileRoute("/remote/$host")({
-  head: () => ({
-    meta: [{ title: "Remote — TV Remote" }],
-  }),
+  head: () => ({ meta: [{ title: "Remote — TV Remote" }] }),
   component: RemotePage,
 });
 
@@ -58,38 +56,44 @@ function RemotePage() {
   }, [host, navigate]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-md flex-col gap-5 px-5 py-5">
-        <header className="flex items-center justify-between gap-3">
-          <Button asChild variant="ghost" size="icon">
-            <Link
-              to="/"
-              onClick={() => {
-                void AndroidTvRemote.disconnect();
-              }}
+    <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
+      <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 2 }}>
+        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 2 }}>
+          <IconButton
+            component={Link}
+            to="/"
+            onClick={() => {
+              void AndroidTvRemote.disconnect();
+            }}
+            sx={{ color: "text.primary" }}
+            aria-label="Back"
+          >
+            <ArrowBackRounded />
+          </IconButton>
+          <Box sx={{ flex: 1, minWidth: 0, textAlign: "center" }}>
+            <Typography variant="subtitle2" noWrap sx={{ fontWeight: 600 }}>
+              {name}
+            </Typography>
+            <Typography
+              variant="caption"
+              noWrap
+              sx={{ color: "text.secondary", display: "block" }}
             >
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <div className="min-w-0 flex-1 text-center">
-            <div className="truncate text-sm font-medium">{name}</div>
-            <div className="truncate text-[11px] text-muted-foreground">
               {host}
-            </div>
-          </div>
+            </Typography>
+          </Box>
           <PowerButton />
-        </header>
+        </Stack>
 
-        <div className="pt-2">
-          <DPad />
-        </div>
-
-        <TransportRow />
-
-        <VolumeRocker volume={volume} />
-
-        <MoreSection />
-      </div>
-    </div>
+        <Stack spacing={2.5}>
+          <Box sx={{ pt: 1 }}>
+            <Touchpad />
+          </Box>
+          <TransportRow />
+          <VolumeRocker volume={volume} />
+          <MoreSection />
+        </Stack>
+      </Box>
+    </Box>
   );
 }
