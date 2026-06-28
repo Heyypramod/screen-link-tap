@@ -184,8 +184,7 @@ function PairPage() {
         {(starting || submitting) && (
           <Stack
             direction="row"
-            style={{ alignItems: "center" }}
-            style={{ justifyContent: "center" }}
+            style={{ alignItems: "center", justifyContent: "center" }}
             spacing={1}
             sx={{ pt: 2, color: "text.secondary" }}
           >
