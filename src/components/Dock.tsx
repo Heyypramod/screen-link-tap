@@ -132,12 +132,14 @@ export function Dock() {
       <Dialog
         open={castOpen}
         onClose={() => setCastOpen(false)}
-        PaperProps={{
-          className: "glass",
-          sx: {
-            borderRadius: "28px",
-            border: "1px solid rgba(255,255,255,0.10)",
-            m: 2,
+        slotProps={{
+          paper: {
+            className: "glass",
+            sx: {
+              borderRadius: "28px",
+              border: "1px solid rgba(255,255,255,0.10)",
+              m: 2,
+            },
           },
         }}
       >

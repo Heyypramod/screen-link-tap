@@ -107,11 +107,10 @@ function SettingsPage() {
         </GlassSurface>
 
         <GlassSurface
-          component={MuiLink as never}
+          component="a"
           href={GITHUB_URL}
           target="_blank"
           rel="noreferrer"
-          underline="none"
           sx={{
             mt: 1.25,
             p: 2,
@@ -119,6 +118,7 @@ function SettingsPage() {
             alignItems: "center",
             gap: 1.5,
             color: "text.primary",
+            textDecoration: "none",
             cursor: "pointer",
             "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
           }}
@@ -138,9 +138,11 @@ function SettingsPage() {
       <Dialog
         open={!!toRemove}
         onClose={() => setToRemove(null)}
-        PaperProps={{
-          className: "glass",
-          sx: { borderRadius: "24px", border: "1px solid rgba(255,255,255,0.10)", m: 2 },
+        slotProps={{
+          paper: {
+            className: "glass",
+            sx: { borderRadius: "24px", border: "1px solid rgba(255,255,255,0.10)", m: 2 },
+          },
         }}
       >
         <DialogTitle sx={{ fontWeight: 700 }}>Unpair this TV?</DialogTitle>
