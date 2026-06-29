@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import { Tv, X, ExternalLink } from "lucide-react";
 
 import { pairedDevices, type PairedDevice } from "@/lib/paired-devices";
@@ -55,7 +63,9 @@ function SettingsPage() {
               <Box key={d.host} className="inset-group-row">
                 <Tv size={22} strokeWidth={1.8} color="currentColor" />
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography className="text-body" noWrap>{d.name}</Typography>
+                  <Typography className="text-body" noWrap>
+                    {d.name}
+                  </Typography>
                   <Typography
                     className="text-footnote"
                     noWrap

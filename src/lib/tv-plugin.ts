@@ -20,10 +20,7 @@ export interface AndroidTvRemotePlugin {
   sendKey(opts: { keyCode: string; direction: KeyDirection }): Promise<void>;
   launchApp(opts: { appLink: string }): Promise<void>;
   disconnect(): Promise<void>;
-  addListener(
-    event: "tvEvent",
-    cb: (ev: TvEvent) => void,
-  ): Promise<PluginListenerHandle>;
+  addListener(event: "tvEvent", cb: (ev: TvEvent) => void): Promise<PluginListenerHandle>;
 }
 
 const noopHandle: PluginListenerHandle = {
