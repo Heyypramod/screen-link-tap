@@ -1,25 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import {
-  DeleteOutlineRounded,
-  RadarRounded,
-  TvRounded,
-  WifiTetheringRounded,
-} from "@mui/icons-material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { Search, Tv, X, Wifi } from "lucide-react";
 import { toast } from "sonner";
 
 import { AndroidTvRemote, type TvDevice } from "@/lib/tv-plugin";
 import { pairedDevices, type PairedDevice } from "@/lib/paired-devices";
 import { tapHaptic } from "@/lib/haptics";
-import { GlassSurface } from "@/components/GlassSurface";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,7 +36,6 @@ function DeviceListPage() {
       const res = await AndroidTvRemote.discover();
       setDiscovered(res.devices ?? []);
     } catch (err) {
-      console.error(err);
       toast.error("Scan failed", { description: String(err) });
     } finally {
       setScanning(false);
@@ -82,185 +68,174 @@ function DeviceListPage() {
   const nothing = paired.length === 0 && discovered.length === 0;
 
   return (
-    <Box sx={{ minHeight: "100vh", color: "text.primary", pb: "96px" }}>
-      <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 4 }}>
-        <Stack direction="row" spacing={2} style={{ alignItems: "center" }} sx={{ mb: 3 }}>
+    <Box sx={{ minHeight: "100vh", pb: "80px" }}>
+      <Box sx={{ maxWidth: 480, mx: "auto", pt: 6 }}>
+        <Typography component="h1" className="text-large-title" sx={{ px: 2, mb: 2 }}>
+          Devices
+        </Typography>
+
+        {/* Search-style "Scan for TVs" */}
+        <Box sx={{ px: 2, mb: 3 }}>
           <Box
+            component="button"
+            onClick={scan}
+            disabled={scanning}
+            className="material-regular corner-continuous tap-target"
             sx={{
-              width: 44,
-              height: 44,
-              borderRadius: "14px",
+              width: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "rgba(182,157,248,0.15)",
-              color: "primary.main",
+              gap: 1,
+              px: 1.5,
+              py: 1.25,
+              borderRadius: "var(--radius-sm)",
+              border: "none",
+              color: "var(--label-secondary)",
+              textAlign: "left",
+              cursor: "pointer",
+              "&:disabled": { opacity: 0.6, cursor: "default" },
             }}
           >
-            <TvRounded />
-          </Box>
-          <Box>
-            <Typography variant="h6">TV Remote</Typography>
-            <Typography variant="caption" color="text.secondary">
-              Control Android TVs on your network
-            </Typography>
-          </Box>
-        </Stack>
-
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          onClick={scan}
-          disabled={scanning}
-          startIcon={
-            scanning ? (
-              <CircularProgress size={18} color="inherit" />
+            {scanning ? (
+              <CircularProgress size={16} sx={{ color: "var(--label-secondary)" }} />
             ) : (
-              <RadarRounded />
-            )
-          }
-          sx={{ minHeight: 56, borderRadius: "20px", mb: 3, fontSize: 16 }}
-        >
-          {scanning ? "Scanning…" : "Scan for TVs"}
-        </Button>
+              <Search size={18} strokeWidth={2} />
+            )}
+            <span className="text-body" style={{ color: "var(--label-primary)" }}>
+              {scanning ? "Scanning…" : "Scan for TVs"}
+            </span>
+          </Box>
+        </Box>
 
         {paired.length > 0 && (
-          <Stack spacing={1.25} sx={{ mb: 3 }}>
-            <SectionLabel>Your TVs</SectionLabel>
-            {paired.map((d) => (
-              <GlassSurface
-                key={d.host}
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1.5,
-                }}
-              >
-                <Box sx={iconChipSx}>
-                  <TvRounded />
-                </Box>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography noWrap style={{ fontWeight: 600 }}>
-                    {d.name}
-                  </Typography>
-                  <Typography variant="caption" noWrap color="text.secondary">
-                    {d.host}
-                  </Typography>
-                </Box>
-                <IconButton
-                  aria-label={`Remove ${d.name}`}
-                  onClick={() => removePaired(d.host)}
-                  sx={{ color: "text.secondary" }}
-                >
-                  <DeleteOutlineRounded />
-                </IconButton>
-                <Button
-                  variant="contained"
+          <>
+            <SectionHeader>My TVs</SectionHeader>
+            <Box className="inset-group corner-continuous">
+              {paired.map((d) => (
+                <Box
+                  key={d.host}
+                  className="inset-group-row tap-target"
                   onClick={() => connectPaired(d)}
-                  disabled={connecting === d.host}
-                  sx={{ borderRadius: "14px", minHeight: 40 }}
+                  role="button"
+                  sx={{ cursor: "pointer" }}
                 >
+                  <Tv size={22} strokeWidth={1.8} color="currentColor" />
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography className="text-body" noWrap>{d.name}</Typography>
+                    <Typography
+                      className="text-footnote"
+                      noWrap
+                      sx={{ color: "var(--label-secondary)" }}
+                    >
+                      {d.host}
+                    </Typography>
+                  </Box>
                   {connecting === d.host ? (
-                    <CircularProgress size={16} color="inherit" />
+                    <CircularProgress size={16} sx={{ color: "var(--color-blue)" }} />
                   ) : (
-                    "Connect"
+                    <Box
+                      component="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removePaired(d.host);
+                      }}
+                      aria-label={`Remove ${d.name}`}
+                      sx={{
+                        background: "transparent",
+                        border: "none",
+                        padding: 0,
+                        cursor: "pointer",
+                        color: "var(--label-tertiary)",
+                        display: "flex",
+                      }}
+                    >
+                      <X size={20} strokeWidth={2} />
+                    </Box>
                   )}
-                </Button>
-              </GlassSurface>
-            ))}
-          </Stack>
+                </Box>
+              ))}
+            </Box>
+          </>
         )}
 
         {unpaired.length > 0 && (
-          <Stack spacing={1.25} sx={{ mb: 3 }}>
-            <SectionLabel>Found on network</SectionLabel>
-            {unpaired.map((d) => (
-              <GlassSurface
-                key={d.host}
-                component="button"
-                onClick={() => {
-                  tapHaptic("Light");
-                  navigate({ to: "/pair/$host", params: { host: d.host } });
-                }}
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1.5,
-                  width: "100%",
-                  textAlign: "left",
-                  cursor: "pointer",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  transition: "background-color 150ms",
-                  "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
-                }}
-              >
-                <Box sx={{ ...iconChipSx, color: "text.secondary", bgcolor: "rgba(255,255,255,0.06)" }}>
-                  <WifiTetheringRounded />
-                </Box>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography noWrap style={{ fontWeight: 600 }}>
-                    {d.name}
-                  </Typography>
-                  <Typography variant="caption" noWrap color="text.secondary">
-                    {d.host}
+          <>
+            <SectionHeader sx={{ mt: 3 }}>Found on Network</SectionHeader>
+            <Box className="inset-group corner-continuous">
+              {unpaired.map((d) => (
+                <Box
+                  key={d.host}
+                  className="inset-group-row tap-target"
+                  role="button"
+                  onClick={() => {
+                    tapHaptic("Light");
+                    navigate({ to: "/pair/$host", params: { host: d.host } });
+                  }}
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Wifi size={22} strokeWidth={1.8} color="currentColor" />
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography className="text-body" noWrap>{d.name}</Typography>
+                    <Typography
+                      className="text-footnote"
+                      noWrap
+                      sx={{ color: "var(--label-secondary)" }}
+                    >
+                      {d.host}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    className="text-callout"
+                    sx={{ color: "var(--color-blue)", fontWeight: 600 }}
+                  >
+                    Pair
                   </Typography>
                 </Box>
-                <Typography variant="caption" color="primary.main" style={{ fontWeight: 600 }}>
-                  Pair
-                </Typography>
-              </GlassSurface>
-            ))}
-          </Stack>
+              ))}
+            </Box>
+          </>
         )}
 
         {nothing && !scanning && (
-          <GlassSurface
-            sx={{
-              mt: 4,
-              p: 5,
-              textAlign: "center",
-              borderStyle: "dashed",
-            }}
-          >
-            <Box sx={{ ...iconChipSx, mx: "auto", mb: 1.5, width: 56, height: 56 }}>
-              <TvRounded sx={{ fontSize: 28 }} />
-            </Box>
-            <Typography style={{ fontWeight: 600 }}>No TVs yet</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Make sure your TV is on and on the same Wi-Fi, then scan.
+          <Box sx={{ px: 2, mt: 6, textAlign: "center" }}>
+            <Typography className="text-headline" sx={{ mb: 0.5 }}>
+              No TVs yet
             </Typography>
-          </GlassSurface>
+            <Typography
+              className="text-subheadline"
+              sx={{ color: "var(--label-secondary)" }}
+            >
+              Make sure your TV is on and on the same Wi-Fi, then tap Scan.
+            </Typography>
+          </Box>
         )}
+      </Box>
+      {/* Keep Link import used (silence unused warning if any future change) */}
+      <Box sx={{ display: "none" }}>
+        <Link to="/" />
       </Box>
     </Box>
   );
 }
 
-const iconChipSx = {
-  width: 44,
-  height: 44,
-  borderRadius: "14px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  bgcolor: "rgba(182,157,248,0.15)",
-  color: "primary.main",
-  flexShrink: 0,
-};
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionHeader({
+  children,
+  sx,
+}: {
+  children: React.ReactNode;
+  sx?: Record<string, unknown>;
+}) {
   return (
     <Typography
-      variant="caption"
+      component="h2"
+      className="text-caption"
       sx={{
-        px: 0.5,
+        px: 4,
+        pb: 0.75,
         textTransform: "uppercase",
-        letterSpacing: 1.5,
-        color: "text.secondary",
         fontWeight: 600,
+        color: "var(--label-secondary)",
+        ...sx,
       }}
     >
       {children}
