@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import { ArrowBackRounded } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+import { Power } from "lucide-react";
 import { toast } from "sonner";
 
 import { AndroidTvRemote, type TvEvent } from "@/lib/tv-plugin";
@@ -28,7 +28,6 @@ function RemotePage() {
   useEffect(() => {
     let handle: { remove: () => Promise<void> } | null = null;
     let cancelled = false;
-
     (async () => {
       try {
         await AndroidTvRemote.connect({ host });
@@ -55,44 +54,53 @@ function RemotePage() {
     };
   }, [host, navigate]);
 
+  // Unused-import silencer: lucide Power is reused in PowerButton via its own import.
+  void Power;
+
   return (
-    <Box sx={{ minHeight: "100vh", color: "text.primary", pb: "112px" }}>
-      <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 2 }}>
-        <Stack direction="row" style={{ alignItems: "center" }} spacing={1.5} sx={{ mb: 2 }}>
-          <IconButton
-            component={Link}
+    <Box sx={{ minHeight: "100vh", pb: "104px" }}>
+      <Box sx={{ maxWidth: 440, mx: "auto" }}>
+        {/* iOS nav bar */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            px: 2,
+            py: 1.5,
+            minHeight: 44,
+            gap: 1,
+          }}
+        >
+          <Link
             to="/"
             onClick={() => {
               void AndroidTvRemote.disconnect();
             }}
-            sx={{ color: "text.primary" }}
-            aria-label="Back"
+            style={{
+              color: "var(--color-blue)",
+              textDecoration: "none",
+              fontSize: 17,
+              letterSpacing: "-0.4px",
+              flex: 1,
+            }}
           >
-            <ArrowBackRounded />
-          </IconButton>
-          <Box sx={{ flex: 1, minWidth: 0, textAlign: "center" }}>
-            <Typography variant="subtitle2" noWrap sx={{ fontWeight: 600 }}>
-              {name}
-            </Typography>
-            <Typography
-              variant="caption"
-              noWrap
-              sx={{ color: "text.secondary", display: "block" }}
-            >
-              {host}
-            </Typography>
+            ‹ Devices
+          </Link>
+          <Typography className="text-headline" noWrap sx={{ flex: 1, textAlign: "center" }}>
+            {name}
+          </Typography>
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <PowerButton />
           </Box>
-          <PowerButton />
-        </Stack>
+        </Box>
 
-        <Stack spacing={2.5}>
-          <Box sx={{ pt: 1 }}>
-            <Touchpad />
-          </Box>
+        <Box sx={{ px: 2, pt: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Touchpad />
           <TransportRow />
           <VolumeRocker volume={volume} />
           <MoreSection />
-        </Stack>
+        </Box>
       </Box>
     </Box>
   );
