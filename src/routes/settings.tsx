@@ -1,20 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  
-  Stack,
-  Typography,
-} from "@mui/material";
-import { CloseRounded, OpenInNewRounded, TvRounded } from "@mui/icons-material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Tv, X, ExternalLink } from "lucide-react";
 
-import { GlassSurface } from "@/components/GlassSurface";
 import { pairedDevices, type PairedDevice } from "@/lib/paired-devices";
 import { tapHaptic } from "@/lib/haptics";
 
@@ -48,91 +36,83 @@ function SettingsPage() {
   }, [toRemove]);
 
   return (
-    <Box sx={{ minHeight: "100vh", color: "text.primary", pb: "96px" }}>
-      <Box sx={{ maxWidth: 440, mx: "auto", px: 2.5, py: 4 }}>
-        <Typography variant="h6" sx={{ mb: 0.5 }}>
+    <Box sx={{ minHeight: "100vh", pb: "80px" }}>
+      <Box sx={{ maxWidth: 480, mx: "auto", pt: 6 }}>
+        <Typography component="h1" className="text-large-title" sx={{ px: 2, mb: 3 }}>
           Settings
         </Typography>
-        <Typography variant="caption" color="text.secondary">
-          Manage paired TVs and learn about the app.
-        </Typography>
 
-        <SectionLabel sx={{ mt: 3 }}>Paired TVs</SectionLabel>
+        <SectionHeader>Paired TVs</SectionHeader>
         {paired.length === 0 ? (
-          <GlassSurface sx={{ p: 3, textAlign: "center", mt: 1 }}>
-            <Typography variant="body2" color="text.secondary">
-              No paired TVs yet. Pair one from the Home screen.
-            </Typography>
-          </GlassSurface>
+          <Box className="inset-group corner-continuous">
+            <Box className="inset-group-row" sx={{ color: "var(--label-secondary)" }}>
+              <Typography className="text-body">No paired TVs yet.</Typography>
+            </Box>
+          </Box>
         ) : (
-          <Stack spacing={1.25} sx={{ mt: 1 }}>
+          <Box className="inset-group corner-continuous">
             {paired.map((d) => (
-              <GlassSurface
-                key={d.host}
-                sx={{ p: 2, display: "flex", alignItems: "center", gap: 1.5 }}
-              >
-                <Box sx={iconChipSx}>
-                  <TvRounded />
-                </Box>
+              <Box key={d.host} className="inset-group-row">
+                <Tv size={22} strokeWidth={1.8} color="currentColor" />
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography noWrap style={{ fontWeight: 600 }}>
-                    {d.name}
-                  </Typography>
-                  <Typography variant="caption" noWrap color="text.secondary">
+                  <Typography className="text-body" noWrap>{d.name}</Typography>
+                  <Typography
+                    className="text-footnote"
+                    noWrap
+                    sx={{ color: "var(--label-secondary)" }}
+                  >
                     {d.host}
                   </Typography>
                 </Box>
-                <IconButton
-                  aria-label={`Unpair ${d.name}`}
+                <Box
+                  component="button"
                   onClick={() => setToRemove(d)}
-                  sx={{ color: "text.secondary" }}
+                  aria-label={`Unpair ${d.name}`}
+                  sx={{
+                    background: "transparent",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer",
+                    color: "var(--label-tertiary)",
+                    display: "flex",
+                  }}
                 >
-                  <CloseRounded />
-                </IconButton>
-              </GlassSurface>
+                  <X size={20} strokeWidth={2} />
+                </Box>
+              </Box>
             ))}
-          </Stack>
+          </Box>
         )}
 
-        <SectionLabel sx={{ mt: 3 }}>About</SectionLabel>
-        <GlassSurface sx={{ p: 2.5, mt: 1 }}>
-          <Typography style={{ fontWeight: 700 }}>TV Remote</Typography>
-          <Typography variant="caption" color="text.secondary">
-            Version {APP_VERSION}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
-            Open-source Android TV remote. Works on your local Wi-Fi — no account, no cloud, no
-            tracking.
-          </Typography>
-        </GlassSurface>
-
-        <Box
-          component="a"
-          href={GITHUB_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="glass"
-          sx={{
-            mt: 1.25,
-            p: 2,
-            display: "flex",
-            alignItems: "center",
-            gap: 1.5,
-            color: "text.primary",
-            textDecoration: "none",
-            cursor: "pointer",
-            borderRadius: "24px",
-            border: "1px solid rgba(255,255,255,0.08)",
-            "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
-          }}
-        >
-          <Box sx={iconChipSx}>
-            <OpenInNewRounded />
+        <SectionHeader sx={{ mt: 3 }}>About</SectionHeader>
+        <Box className="inset-group corner-continuous">
+          <Box className="inset-group-row" sx={{ display: "block" }}>
+            <Typography className="text-headline">TV Remote</Typography>
+            <Typography className="text-footnote" sx={{ color: "var(--label-secondary)" }}>
+              Version {APP_VERSION}
+            </Typography>
+            <Typography
+              className="text-subheadline"
+              sx={{ mt: 1, color: "var(--label-secondary)" }}
+            >
+              Open-source Android TV remote. Works on your local Wi-Fi — no account, no cloud, no
+              tracking.
+            </Typography>
           </Box>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography style={{ fontWeight: 600 }}>View source on GitHub</Typography>
-            <Typography variant="caption" noWrap color="text.secondary">
-              {GITHUB_URL}
+          <Box
+            component="a"
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inset-group-row tap-target"
+            sx={{
+              color: "var(--color-blue)",
+              textDecoration: "none",
+            }}
+          >
+            <ExternalLink size={20} strokeWidth={1.8} />
+            <Typography className="text-body" sx={{ flex: 1 }}>
+              View source on GitHub
             </Typography>
           </Box>
         </Box>
@@ -143,49 +123,64 @@ function SettingsPage() {
         onClose={() => setToRemove(null)}
         slotProps={{
           paper: {
-            className: "glass",
-            sx: { borderRadius: "24px", border: "1px solid rgba(255,255,255,0.10)", m: 2 },
+            className: "material-thick",
+            sx: {
+              borderRadius: "var(--radius-lg)",
+              m: 2,
+              background: "rgba(40, 40, 44, 0.92)",
+            },
           },
         }}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>Unpair this TV?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, fontSize: 17, textAlign: "center", pb: 0.5 }}>
+          Unpair this TV?
+        </DialogTitle>
         <DialogContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            className="text-subheadline"
+            sx={{ textAlign: "center", color: "var(--label-secondary)" }}
+          >
             {toRemove?.name} ({toRemove?.host}) will be removed. You'll need to pair again to
             control it.
           </Typography>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setToRemove(null)} sx={{ borderRadius: "14px" }}>
+        <DialogActions sx={{ p: 2, gap: 1 }}>
+          <Button
+            fullWidth
+            onClick={() => setToRemove(null)}
+            sx={{
+              borderRadius: "var(--radius-md)",
+              background: "var(--fill-tertiary)",
+              color: "var(--label-primary)",
+              "&:hover": { background: "var(--fill-secondary)" },
+            }}
+          >
             Cancel
           </Button>
           <Button
+            fullWidth
             variant="contained"
-            color="error"
             onClick={confirmRemove}
-            sx={{ borderRadius: "14px" }}
+            sx={{
+              borderRadius: "var(--radius-md)",
+              background: "var(--color-red)",
+              "&:hover": { background: "var(--color-red)", opacity: 0.9 },
+            }}
           >
             Unpair
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Keep Link import reserved for future settings sub-pages */}
+      <Box sx={{ display: "none" }}>
+        <Link to="/" />
+      </Box>
     </Box>
   );
 }
 
-const iconChipSx = {
-  width: 44,
-  height: 44,
-  borderRadius: "14px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  bgcolor: "rgba(182,157,248,0.15)",
-  color: "primary.main",
-  flexShrink: 0,
-};
-
-function SectionLabel({
+function SectionHeader({
   children,
   sx,
 }: {
@@ -194,15 +189,14 @@ function SectionLabel({
 }) {
   return (
     <Typography
-      variant="caption"
+      component="h2"
+      className="text-caption"
       sx={{
-        display: "block",
-        px: 0.5,
-        mb: 0.5,
+        px: 4,
+        pb: 0.75,
         textTransform: "uppercase",
-        letterSpacing: 1.5,
-        color: "text.secondary",
         fontWeight: 600,
+        color: "var(--label-secondary)",
         ...sx,
       }}
     >

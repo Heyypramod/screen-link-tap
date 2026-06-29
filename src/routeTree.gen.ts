@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as CastRouteImport } from './routes/cast'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RemoteHostRouteImport } from './routes/remote.$host'
 import { Route as PairHostRouteImport } from './routes/pair.$host'
@@ -17,6 +18,11 @@ import { Route as PairHostRouteImport } from './routes/pair.$host'
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CastRoute = CastRouteImport.update({
+  id: '/cast',
+  path: '/cast',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const PairHostRoute = PairHostRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cast': typeof CastRoute
   '/settings': typeof SettingsRoute
   '/pair/$host': typeof PairHostRoute
   '/remote/$host': typeof RemoteHostRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cast': typeof CastRoute
   '/settings': typeof SettingsRoute
   '/pair/$host': typeof PairHostRoute
   '/remote/$host': typeof RemoteHostRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cast': typeof CastRoute
   '/settings': typeof SettingsRoute
   '/pair/$host': typeof PairHostRoute
   '/remote/$host': typeof RemoteHostRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/settings' | '/pair/$host' | '/remote/$host'
+  fullPaths: '/' | '/cast' | '/settings' | '/pair/$host' | '/remote/$host'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings' | '/pair/$host' | '/remote/$host'
-  id: '__root__' | '/' | '/settings' | '/pair/$host' | '/remote/$host'
+  to: '/' | '/cast' | '/settings' | '/pair/$host' | '/remote/$host'
+  id: '__root__' | '/' | '/cast' | '/settings' | '/pair/$host' | '/remote/$host'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CastRoute: typeof CastRoute
   SettingsRoute: typeof SettingsRoute
   PairHostRoute: typeof PairHostRoute
   RemoteHostRoute: typeof RemoteHostRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cast': {
+      id: '/cast'
+      path: '/cast'
+      fullPath: '/cast'
+      preLoaderRoute: typeof CastRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CastRoute: CastRoute,
   SettingsRoute: SettingsRoute,
   PairHostRoute: PairHostRoute,
   RemoteHostRoute: RemoteHostRoute,

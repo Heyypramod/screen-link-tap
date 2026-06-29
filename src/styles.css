@@ -4,196 +4,183 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--label-primary);
+  --color-border: var(--separator);
+  --color-primary: var(--color-blue);
+  --color-primary-foreground: #fff;
+  --color-destructive: var(--color-red);
 }
 
 :root {
-  --radius: 1rem;
-  --background: oklch(0.16 0 0);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.21 0 0);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.21 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.78 0.14 230);
-  --primary-foreground: oklch(0.15 0.02 230);
-  --secondary: oklch(0.26 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.26 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.3 0 0);
-  --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.32 0 0);
-  --input: oklch(0.3 0 0);
-  --ring: oklch(0.78 0.14 230);
-  --chart-1: oklch(0.78 0.14 230);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.18 0 0);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.78 0.14 230);
-  --sidebar-primary-foreground: oklch(0.15 0.02 230);
-  --sidebar-accent: oklch(0.26 0 0);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.32 0 0);
-  --sidebar-ring: oklch(0.78 0.14 230);
+  /* Apple system colors (iOS dark mode) */
+  --color-blue: #0a84ff;
+  --color-red: #ff453a;
+  --color-green: #30d158;
+  --color-orange: #ff9f0a;
+  --color-yellow: #ffd60a;
+  --color-purple: #bf5af2;
+
+  /* Labels */
+  --label-primary: rgba(255, 255, 255, 1);
+  --label-secondary: rgba(235, 235, 245, 0.60);
+  --label-tertiary: rgba(235, 235, 245, 0.30);
+  --label-quaternary: rgba(235, 235, 245, 0.18);
+
+  /* Fills */
+  --fill-primary: rgba(120, 120, 128, 0.36);
+  --fill-secondary: rgba(120, 120, 128, 0.32);
+  --fill-tertiary: rgba(118, 118, 128, 0.24);
+  --fill-quaternary: rgba(116, 118, 128, 0.18);
+
+  /* Backgrounds */
+  --bg-primary: #000;
+  --bg-secondary: #1c1c1e;
+  --bg-grouped: #000;
+  --bg-grouped-secondary: #1c1c1e;
+
+  /* Separator */
+  --separator: rgba(84, 84, 88, 0.65);
+  --separator-opaque: #38383a;
+
+  /* Materials */
+  --material-thin: rgba(255, 255, 255, 0.04);
+  --material-regular: rgba(255, 255, 255, 0.06);
+  --material-thick: rgba(255, 255, 255, 0.10);
+  --material-chrome: rgba(10, 10, 12, 0.78);
+
+  /* Shape */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-touchpad: 32px;
+
+  /* Type */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Motion */
+  --spring-stiff: cubic-bezier(0.32, 0.72, 0, 1);
+  --spring-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 200ms;
+  --dur-base: 320ms;
 }
 
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-primary);
+  color: var(--label-primary);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'ss01', 'cv11';
+  min-height: 100vh;
+  overscroll-behavior: none;
 }
 
-@layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
-  html,
-  body,
-  #root {
-    height: 100%;
-  }
-
-  body {
-    background-color: #0e0b16;
-    color: var(--color-foreground);
-    overflow-x: hidden;
-  }
-}
-
-/* Animated gradient background — subtle drift behind the frosted glass. */
-.app-bg {
-  position: fixed;
-  inset: -10%;
-  z-index: -1;
+body {
   background:
-    radial-gradient(40% 50% at 20% 20%, rgba(112, 80, 220, 0.45), transparent 60%),
-    radial-gradient(45% 55% at 80% 30%, rgba(40, 90, 200, 0.4), transparent 65%),
-    radial-gradient(50% 60% at 50% 90%, rgba(180, 70, 160, 0.35), transparent 65%),
-    #0a0712;
-  filter: blur(20px);
-  animation: app-bg-drift 24s ease-in-out infinite alternate;
-  will-change: transform;
+    radial-gradient(ellipse 50% 35% at 20% 15%, rgba(80, 80, 100, 0.22), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 85%, rgba(60, 60, 80, 0.18), transparent 70%),
+    #000;
+  background-attachment: fixed;
 }
 
-@keyframes app-bg-drift {
-  0% {
-    transform: translate3d(-3%, -2%, 0) scale(1.05);
-  }
-  50% {
-    transform: translate3d(2%, 1%, 0) scale(1.08);
-  }
-  100% {
-    transform: translate3d(-1%, 3%, 0) scale(1.05);
-  }
-}
+.text-large-title { font-size: 34px; font-weight: 700; letter-spacing: -0.8px; line-height: 1.05; }
+.text-title-1     { font-size: 28px; font-weight: 700; letter-spacing: -0.7px; line-height: 1.1; }
+.text-title-2     { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; }
+.text-title-3     { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; line-height: 1.2; }
+.text-headline    { font-size: 17px; font-weight: 600; letter-spacing: -0.4px; }
+.text-body        { font-size: 17px; font-weight: 400; letter-spacing: -0.4px; }
+.text-callout     { font-size: 16px; font-weight: 400; letter-spacing: -0.3px; }
+.text-subheadline { font-size: 15px; font-weight: 400; letter-spacing: -0.2px; }
+.text-footnote    { font-size: 13px; font-weight: 400; letter-spacing: -0.1px; }
+.text-caption     { font-size: 12px; font-weight: 500; letter-spacing: 0; }
 
-@media (prefers-reduced-motion: reduce) {
-  .app-bg {
-    animation: none;
-  }
-}
-
-/* Frosted-glass surface. Standard property only — the build adds vendor
-   prefixes itself; hand-writing -webkit-backdrop-filter would cause Lightning
-   CSS to drop the standard rule in production. */
-.glass {
-  background-color: rgba(28, 24, 38, 0.55);
+.material-thin {
+  background: var(--material-thin);
   backdrop-filter: blur(20px) saturate(180%);
+}
+.material-regular {
+  background: var(--material-regular);
+  backdrop-filter: blur(40px) saturate(180%);
+}
+.material-thick {
+  background: var(--material-thick);
+  backdrop-filter: blur(60px) saturate(180%);
+}
+.material-chrome {
+  background: var(--material-chrome);
+  backdrop-filter: blur(50px) saturate(180%);
 }
 
 @supports not (backdrop-filter: blur(1px)) {
-  .glass {
-    background-color: rgba(22, 19, 30, 0.95);
-  }
+  .material-thin     { background: #1c1c1e; }
+  .material-regular  { background: #2c2c2e; }
+  .material-thick    { background: #3a3a3c; }
+  .material-chrome   { background: #1c1c1e; }
 }
 
+.corner-continuous {
+  -webkit-border-curve: continuous;
+  border-curve: continuous;
+}
+
+.inset-group {
+  background: var(--material-regular);
+  backdrop-filter: blur(40px) saturate(180%);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 0 16px;
+}
+.inset-group-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  min-height: 44px;
+}
+.inset-group-row + .inset-group-row {
+  border-top: 0.5px solid var(--separator);
+}
+
+.btn-primary {
+  background: var(--color-blue);
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: opacity var(--dur-fast) var(--spring-snappy);
+}
+.btn-primary:active { opacity: 0.7; }
+.btn-primary:disabled { opacity: 0.4; }
+
+.tap-target {
+  transition: transform var(--dur-fast) var(--spring-snappy), opacity var(--dur-fast) var(--spring-snappy);
+  cursor: pointer;
+}
+.tap-target:active {
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+@layer base {
+  * { border-color: var(--separator); }
+  html, body, #root { height: 100%; }
+}

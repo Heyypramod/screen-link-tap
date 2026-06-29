@@ -1,39 +1,46 @@
-import { createTheme, alpha } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
-// M3-inspired dark theme. Single primary constant; change here to retune.
-export const PRIMARY = "#B69DF8"; // M3 deep-purple primary40-ish for dark
-
+// iOS-style theme. Kept exported as m3Theme for import compatibility.
 export const m3Theme = createTheme({
   palette: {
     mode: "dark",
-    primary: { main: PRIMARY, contrastText: "#1F1147" },
-    secondary: { main: "#CCC2DC" },
-    error: { main: "#F2B8B5" },
-    background: {
-      default: "#0E0B16",
-      paper: "rgba(28, 24, 38, 0.6)",
-    },
+    primary: { main: "#0a84ff", contrastText: "#ffffff" },
+    error: { main: "#ff453a" },
+    success: { main: "#30d158" },
+    background: { default: "#000", paper: "rgba(255, 255, 255, 0.06)" },
     text: {
-      primary: "#E6E1E9",
-      secondary: "#CAC4D0",
+      primary: "rgba(255, 255, 255, 1)",
+      secondary: "rgba(235, 235, 245, 0.60)",
     },
-    divider: alpha("#ffffff", 0.08),
+    divider: "rgba(84, 84, 88, 0.65)",
   },
-  shape: { borderRadius: 16 },
   typography: {
     fontFamily:
-      'Roboto, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif',
-    h6: { fontWeight: 600, letterSpacing: 0 },
-    button: { textTransform: "none", fontWeight: 600, letterSpacing: 0.1 },
+      "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif",
+    h1: { fontSize: 34, fontWeight: 700, letterSpacing: "-0.8px", lineHeight: 1.05 },
+    h2: { fontSize: 28, fontWeight: 700, letterSpacing: "-0.7px", lineHeight: 1.1 },
+    h3: { fontSize: 22, fontWeight: 700, letterSpacing: "-0.5px" },
+    body1: { fontSize: 17, letterSpacing: "-0.4px" },
+    body2: { fontSize: 15, letterSpacing: "-0.2px" },
+    button: { textTransform: "none", fontWeight: 600, letterSpacing: "-0.4px", fontSize: 17 },
   },
+  shape: { borderRadius: 14 },
   components: {
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: {
-        root: {
-          borderRadius: 16,
-          paddingInline: 20,
-          minHeight: 48,
+        root: { borderRadius: 14, padding: "12px 18px" },
+        contained: {
+          background: "#0a84ff",
+          boxShadow: "none",
+          "&:hover": { background: "#0a84ff", opacity: 0.9, boxShadow: "none" },
+          "&:active": { opacity: 0.7 },
+        },
+        outlined: {
+          background: "rgba(120, 120, 128, 0.24)",
+          borderColor: "transparent",
+          color: "#fff",
+          "&:hover": { background: "rgba(120, 120, 128, 0.32)", borderColor: "transparent" },
         },
       },
     },
@@ -41,13 +48,9 @@ export const m3Theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: "none",
-        },
-      },
-    },
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          borderRadius: 24,
+          background: "rgba(255, 255, 255, 0.06)",
+          backdropFilter: "blur(40px) saturate(180%)",
+          border: "none",
         },
       },
     },
