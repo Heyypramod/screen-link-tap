@@ -1,10 +1,5 @@
-import { Box, IconButton, LinearProgress, Typography } from "@mui/material";
-import {
-  AddRounded,
-  RemoveRounded,
-  VolumeOffRounded,
-  VolumeUpRounded,
-} from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+import { Minus, Plus, Volume2, VolumeX } from "lucide-react";
 
 import { KEY } from "@/lib/keycodes";
 import { AndroidTvRemote } from "@/lib/tv-plugin";
@@ -19,84 +14,61 @@ interface Props {
   volume: { level: number; max: number; muted: boolean } | null;
 }
 
-const btnSx = {
-  width: 64,
-  height: 56,
-  borderRadius: "16px",
-  backgroundColor: "rgba(255,255,255,0.06)",
-  color: "text.primary",
-  "&:hover": { backgroundColor: "rgba(255,255,255,0.12)" },
-};
-
 export function VolumeRocker({ volume }: Props) {
-  const pct = volume
-    ? Math.round((volume.level / Math.max(volume.max, 1)) * 100)
-    : 0;
+  const pct = volume ? Math.round((volume.level / Math.max(volume.max, 1)) * 100) : 0;
+  const segmentSx = {
+    flex: 1,
+    minHeight: 56,
+    border: "none",
+    background: "transparent",
+    color: "var(--label-primary)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    fontFamily: "inherit",
+    transition: "opacity 150ms var(--spring-snappy)",
+    "&:active": { opacity: 0.6 },
+  } as const;
 
   return (
-    <Box
-      className="glass"
-      sx={{
-        p: 1.5,
-        borderRadius: "24px",
-        border: "1px solid rgba(255,255,255,0.08)",
-        display: "flex",
-        flexDirection: "column",
-        gap: 1.25,
-      }}
-    >
-      <Box sx={{ display: "flex", justifyContent: "space-between", px: 0.5 }}>
-        <Typography
-          variant="caption"
-          sx={{
-            textTransform: "uppercase",
-            letterSpacing: 1.5,
-            color: "text.secondary",
-            fontWeight: 600,
-          }}
-        >
-          Volume
-        </Typography>
-        {volume && (
-          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+      {volume && (
+        <Box sx={{ display: "flex", justifyContent: "space-between", px: 0.5 }}>
+          <Typography className="text-caption" sx={{ color: "var(--label-secondary)" }}>
+            VOLUME
+          </Typography>
+          <Typography className="text-caption" sx={{ color: "var(--label-secondary)" }}>
             {volume.muted ? "Muted" : `${pct}%`}
           </Typography>
-        )}
-      </Box>
-      {volume && (
-        <LinearProgress
-          variant="determinate"
-          value={volume.muted ? 0 : pct}
-          sx={{
-            height: 6,
-            borderRadius: 999,
-            backgroundColor: "rgba(255,255,255,0.08)",
-            "& .MuiLinearProgress-bar": { borderRadius: 999 },
-          }}
-        />
+        </Box>
       )}
-      <Box sx={{ display: "flex", gap: 1.25, justifyContent: "space-between" }}>
-        <IconButton
-          aria-label="Volume down"
-          onClick={() => tap(KEY.VOLUME_DOWN)}
-          sx={{ ...btnSx, flex: 1 }}
-        >
-          <RemoveRounded />
-        </IconButton>
-        <IconButton
-          aria-label="Mute"
-          onClick={() => tap(KEY.VOLUME_MUTE)}
-          sx={{ ...btnSx, flex: 1 }}
-        >
-          {volume?.muted ? <VolumeOffRounded /> : <VolumeUpRounded />}
-        </IconButton>
-        <IconButton
-          aria-label="Volume up"
-          onClick={() => tap(KEY.VOLUME_UP)}
-          sx={{ ...btnSx, flex: 1 }}
-        >
-          <AddRounded />
-        </IconButton>
+      <Box
+        className="material-regular corner-continuous"
+        sx={{
+          display: "flex",
+          alignItems: "stretch",
+          borderRadius: 999,
+          overflow: "hidden",
+        }}
+      >
+        <Box component="button" aria-label="Volume down" onClick={() => tap(KEY.VOLUME_DOWN)} sx={segmentSx}>
+          <Minus size={22} strokeWidth={2} />
+        </Box>
+        <Box
+          aria-hidden
+          sx={{ width: "0.5px", background: "var(--separator)", my: 1 }}
+        />
+        <Box component="button" aria-label="Mute" onClick={() => tap(KEY.VOLUME_MUTE)} sx={segmentSx}>
+          {volume?.muted ? <VolumeX size={22} strokeWidth={2} /> : <Volume2 size={22} strokeWidth={2} />}
+        </Box>
+        <Box
+          aria-hidden
+          sx={{ width: "0.5px", background: "var(--separator)", my: 1 }}
+        />
+        <Box component="button" aria-label="Volume up" onClick={() => tap(KEY.VOLUME_UP)} sx={segmentSx}>
+          <Plus size={22} strokeWidth={2} />
+        </Box>
       </Box>
     </Box>
   );

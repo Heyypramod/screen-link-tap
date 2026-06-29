@@ -6,9 +6,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
 } from "@mui/material";
-import { PowerSettingsNewRounded } from "@mui/icons-material";
+import { Power } from "lucide-react";
 
 import { KEY } from "@/lib/keycodes";
 import { AndroidTvRemote } from "@/lib/tv-plugin";
@@ -29,49 +28,72 @@ export function PowerButton() {
 
   return (
     <>
-      <IconButton
+      <button
+        type="button"
         aria-label="Power"
         onClick={() => {
           tapHaptic("Light");
           setOpen(true);
         }}
-        sx={{
-          width: 48,
-          height: 48,
-          borderRadius: "16px",
-          color: "error.main",
-          backgroundColor: "rgba(242, 184, 181, 0.12)",
-          border: "1px solid rgba(242,184,181,0.3)",
-          "&:hover": { backgroundColor: "rgba(242, 184, 181, 0.2)" },
+        className="tap-target"
+        style={{
+          background: "transparent",
+          border: "none",
+          padding: 6,
+          cursor: "pointer",
+          color: "var(--color-red)",
+          display: "flex",
         }}
       >
-        <PowerSettingsNewRounded />
-      </IconButton>
+        <Power size={22} strokeWidth={2} />
+      </button>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         slotProps={{
           paper: {
-            className: "glass",
-            sx: { border: "1px solid rgba(255,255,255,0.1)" },
+            className: "material-thick",
+            sx: {
+              borderRadius: "var(--radius-lg)",
+              m: 2,
+              background: "rgba(40, 40, 44, 0.92)",
+            },
           },
         }}
       >
-        <DialogTitle>Power off the TV?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, fontSize: 17, textAlign: "center", pb: 0.5 }}>
+          Power off the TV?
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText
+            className="text-subheadline"
+            sx={{ textAlign: "center", color: "var(--label-secondary)" }}
+          >
             This will send the power key to your TV.
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setOpen(false)} variant="text">
+        <DialogActions sx={{ p: 2, gap: 1 }}>
+          <Button
+            fullWidth
+            onClick={() => setOpen(false)}
+            sx={{
+              borderRadius: "var(--radius-md)",
+              background: "var(--fill-tertiary)",
+              color: "var(--label-primary)",
+              "&:hover": { background: "var(--fill-secondary)" },
+            }}
+          >
             Cancel
           </Button>
           <Button
-            onClick={send}
+            fullWidth
             variant="contained"
-            color="error"
-            sx={{ borderRadius: "16px" }}
+            onClick={send}
+            sx={{
+              borderRadius: "var(--radius-md)",
+              background: "var(--color-red)",
+              "&:hover": { background: "var(--color-red)", opacity: 0.9 },
+            }}
           >
             Power
           </Button>

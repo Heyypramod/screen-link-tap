@@ -1,17 +1,6 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Collapse,
-  IconButton,
-} from "@mui/material";
-import {
-  ExpandMoreRounded,
-  FastForwardRounded,
-  FastRewindRounded,
-  PlayArrowRounded,
-  SearchRounded,
-} from "@mui/icons-material";
+import { Box, Collapse } from "@mui/material";
+import { ChevronDown, FastForward, Play, Rewind, Search } from "lucide-react";
 
 import { KEY } from "@/lib/keycodes";
 import { AndroidTvRemote } from "@/lib/tv-plugin";
@@ -23,64 +12,80 @@ function tap(keyCode: string) {
 }
 
 const items = [
-  { label: "Rew", icon: <FastRewindRounded />, code: KEY.REWIND },
-  { label: "Play", icon: <PlayArrowRounded />, code: KEY.PLAY_PAUSE },
-  { label: "FF", icon: <FastForwardRounded />, code: KEY.FAST_FORWARD },
-  { label: "Search", icon: <SearchRounded />, code: KEY.SEARCH },
+  { label: "Rewind", icon: Rewind, code: KEY.REWIND },
+  { label: "Play / Pause", icon: Play, code: KEY.PLAY_PAUSE },
+  { label: "Fast Forward", icon: FastForward, code: KEY.FAST_FORWARD },
+  { label: "Search", icon: Search, code: KEY.SEARCH },
 ];
-
-const btnSx = {
-  flex: 1,
-  height: 56,
-  borderRadius: "16px",
-  backgroundColor: "rgba(255,255,255,0.06)",
-  color: "text.primary",
-  "&:hover": { backgroundColor: "rgba(255,255,255,0.12)" },
-};
 
 export function MoreSection() {
   const [open, setOpen] = useState(false);
+
   return (
     <Box
-      className="glass"
+      className="material-regular corner-continuous"
       sx={{
-        borderRadius: "24px",
-        border: "1px solid rgba(255,255,255,0.08)",
+        borderRadius: "var(--radius-md)",
         overflow: "hidden",
       }}
     >
-      <Button
-        fullWidth
-        onClick={() => setOpen((v) => !v)}
-        endIcon={
-          <ExpandMoreRounded
-            sx={{
-              transition: "transform 200ms",
-              transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            }}
-          />
-        }
+      <Box
+        component="button"
+        onClick={() => {
+          tapHaptic("Light");
+          setOpen((v) => !v);
+        }}
         sx={{
+          width: "100%",
+          minHeight: 48,
+          display: "flex",
+          alignItems: "center",
           justifyContent: "space-between",
-          color: "text.primary",
-          py: 1.5,
+          background: "transparent",
+          border: "none",
+          color: "var(--label-primary)",
           px: 2,
-          borderRadius: 0,
+          cursor: "pointer",
+          fontFamily: "inherit",
         }}
       >
-        More
-      </Button>
+        <span className="text-body">More</span>
+        <ChevronDown
+          size={20}
+          strokeWidth={1.8}
+          style={{
+            transition: "transform 200ms var(--spring-snappy)",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            color: "var(--label-secondary)",
+          }}
+        />
+      </Box>
       <Collapse in={open}>
-        <Box sx={{ display: "flex", gap: 1, p: 1.25, pt: 0 }}>
-          {items.map((it) => (
-            <IconButton
-              key={it.label}
-              aria-label={it.label}
-              onClick={() => tap(it.code)}
-              sx={btnSx}
+        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+          {items.map(({ label, icon: Icon, code }, i) => (
+            <Box
+              key={label}
+              component="button"
+              aria-label={label}
+              onClick={() => tap(code)}
+              sx={{
+                minHeight: 64,
+                background: "transparent",
+                border: "none",
+                borderTop: "0.5px solid var(--separator)",
+                borderLeft: i === 0 ? "none" : "0.5px solid var(--separator)",
+                color: "var(--label-primary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                fontFamily: "inherit",
+                transition: "opacity 150ms var(--spring-snappy)",
+                "&:active": { opacity: 0.6 },
+              }}
             >
-              {it.icon}
-            </IconButton>
+              <Icon size={22} strokeWidth={1.8} />
+            </Box>
           ))}
         </Box>
       </Collapse>

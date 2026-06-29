@@ -12,10 +12,10 @@ import { AndroidTvRemote, type KeyDirection } from "@/lib/tv-plugin";
 import { tapHaptic } from "@/lib/haptics";
 
 const SWIPE_MIN_PX = 30;
-const AXIS_RATIO = 2; // dominant axis must beat the other by 2x
+const AXIS_RATIO = 2;
 const TAP_MAX_MS = 200;
 const LONG_PRESS_MS = 500;
-const TAP_MOVE_TOLERANCE = 8; // px — finger jitter still counts as no movement
+const TAP_MOVE_TOLERANCE = 8;
 
 type Direction = "up" | "down" | "left" | "right";
 
@@ -106,7 +106,6 @@ export function Touchpad() {
       return;
     }
 
-    // Swipe detection — require dominant axis.
     if (adx >= SWIPE_MIN_PX && adx >= AXIS_RATIO * ady) {
       const dir: Direction = dx > 0 ? "right" : "left";
       tapHaptic("Light");
@@ -122,7 +121,6 @@ export function Touchpad() {
       return;
     }
 
-    // Tap: small movement and quick.
     if (adx <= TAP_MOVE_TOLERANCE && ady <= TAP_MOVE_TOLERANCE && dt < TAP_MAX_MS) {
       tapHaptic("Medium");
       send(KEY.DPAD_CENTER, "SHORT");
@@ -156,43 +154,18 @@ export function Touchpad() {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
       onContextMenu={(e) => e.preventDefault()}
-      className="glass"
+      className="material-regular corner-continuous"
       sx={{
         position: "relative",
-        width: "70%",
+        width: "100%",
         aspectRatio: "1 / 1",
-        mx: "auto",
-        borderRadius: "32px",
-        border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: "var(--radius-touchpad)",
         overflow: "hidden",
         touchAction: "none",
         userSelect: "none",
         cursor: "pointer",
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
-        transition: "transform 80ms ease",
-        "&:active": { transform: "scale(0.995)" },
       }}
     >
-      {/* center dot affordance */}
-      <Box
-        sx={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "rgba(255,255,255,0.16)",
-          fontSize: 12,
-          letterSpacing: 2,
-          fontWeight: 600,
-          textTransform: "uppercase",
-          pointerEvents: "none",
-        }}
-      >
-        Touch
-      </Box>
-
-      {/* ripples */}
       {ripples.map((r) => (
         <Box
           key={r.id}
@@ -204,18 +177,17 @@ export function Touchpad() {
             height: 24,
             borderRadius: "50%",
             transform: "translate(-50%, -50%)",
-            backgroundColor: "rgba(182, 157, 248, 0.45)",
+            backgroundColor: "rgba(255, 255, 255, 0.22)",
             pointerEvents: "none",
             animation: "tp-ripple 600ms ease-out forwards",
             "@keyframes tp-ripple": {
-              "0%": { opacity: 0.6, transform: "translate(-50%, -50%) scale(0.4)" },
+              "0%": { opacity: 0.5, transform: "translate(-50%, -50%) scale(0.4)" },
               "100%": { opacity: 0, transform: "translate(-50%, -50%) scale(8)" },
             },
           }}
         />
       ))}
 
-      {/* arrow flash */}
       {ArrowIcon && (
         <Box
           sx={{
@@ -225,7 +197,7 @@ export function Touchpad() {
             alignItems: "center",
             justifyContent: "center",
             pointerEvents: "none",
-            color: "primary.main",
+            color: "var(--label-primary)",
             animation: "tp-arrow 180ms ease-out forwards",
             "@keyframes tp-arrow": {
               "0%": { opacity: 0, transform: "scale(0.7)" },
@@ -234,7 +206,7 @@ export function Touchpad() {
             },
           }}
         >
-          <ArrowIcon sx={{ fontSize: 96, filter: "drop-shadow(0 0 12px rgba(182,157,248,0.6))" }} />
+          <ArrowIcon sx={{ fontSize: 96 }} />
         </Box>
       )}
     </Box>
