@@ -1,11 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ClipboardEvent,
-  type KeyboardEvent,
-} from "react";
+import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { toast } from "sonner";
 
@@ -167,8 +161,7 @@ function PairPage() {
                 outline: "none",
                 fontFamily: "inherit",
                 transition: "box-shadow 150ms var(--spring-snappy)",
-                boxShadow:
-                  focused === i ? "0 0 0 2px var(--color-blue)" : "none",
+                boxShadow: focused === i ? "0 0 0 2px var(--color-blue)" : "none",
                 "&:disabled": { opacity: 0.5 },
               }}
             />

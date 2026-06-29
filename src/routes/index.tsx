@@ -10,10 +10,7 @@ import { tapHaptic } from "@/lib/haptics";
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "TV Remote" },
-      { name: "description", content: "Control your Android TV." },
-    ],
+    meta: [{ title: "TV Remote" }, { name: "description", content: "Control your Android TV." }],
   }),
   component: DeviceListPage,
 });
@@ -121,7 +118,9 @@ function DeviceListPage() {
                 >
                   <Tv size={22} strokeWidth={1.8} color="currentColor" />
                   <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography className="text-body" noWrap>{d.name}</Typography>
+                    <Typography className="text-body" noWrap>
+                      {d.name}
+                    </Typography>
                     <Typography
                       className="text-footnote"
                       noWrap
@@ -175,7 +174,9 @@ function DeviceListPage() {
                 >
                   <Wifi size={22} strokeWidth={1.8} color="currentColor" />
                   <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography className="text-body" noWrap>{d.name}</Typography>
+                    <Typography className="text-body" noWrap>
+                      {d.name}
+                    </Typography>
                     <Typography
                       className="text-footnote"
                       noWrap
@@ -201,10 +202,7 @@ function DeviceListPage() {
             <Typography className="text-headline" sx={{ mb: 0.5 }}>
               No TVs yet
             </Typography>
-            <Typography
-              className="text-subheadline"
-              sx={{ color: "var(--label-secondary)" }}
-            >
+            <Typography className="text-subheadline" sx={{ color: "var(--label-secondary)" }}>
               Make sure your TV is on and on the same Wi-Fi, then tap Scan.
             </Typography>
           </Box>

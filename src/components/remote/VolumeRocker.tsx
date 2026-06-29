@@ -52,21 +52,34 @@ export function VolumeRocker({ volume }: Props) {
           overflow: "hidden",
         }}
       >
-        <Box component="button" aria-label="Volume down" onClick={() => tap(KEY.VOLUME_DOWN)} sx={segmentSx}>
+        <Box
+          component="button"
+          aria-label="Volume down"
+          onClick={() => tap(KEY.VOLUME_DOWN)}
+          sx={segmentSx}
+        >
           <Minus size={22} strokeWidth={2} />
         </Box>
+        <Box aria-hidden sx={{ width: "0.5px", background: "var(--separator)", my: 1 }} />
         <Box
-          aria-hidden
-          sx={{ width: "0.5px", background: "var(--separator)", my: 1 }}
-        />
-        <Box component="button" aria-label="Mute" onClick={() => tap(KEY.VOLUME_MUTE)} sx={segmentSx}>
-          {volume?.muted ? <VolumeX size={22} strokeWidth={2} /> : <Volume2 size={22} strokeWidth={2} />}
+          component="button"
+          aria-label="Mute"
+          onClick={() => tap(KEY.VOLUME_MUTE)}
+          sx={segmentSx}
+        >
+          {volume?.muted ? (
+            <VolumeX size={22} strokeWidth={2} />
+          ) : (
+            <Volume2 size={22} strokeWidth={2} />
+          )}
         </Box>
+        <Box aria-hidden sx={{ width: "0.5px", background: "var(--separator)", my: 1 }} />
         <Box
-          aria-hidden
-          sx={{ width: "0.5px", background: "var(--separator)", my: 1 }}
-        />
-        <Box component="button" aria-label="Volume up" onClick={() => tap(KEY.VOLUME_UP)} sx={segmentSx}>
+          component="button"
+          aria-label="Volume up"
+          onClick={() => tap(KEY.VOLUME_UP)}
+          sx={segmentSx}
+        >
           <Plus size={22} strokeWidth={2} />
         </Box>
       </Box>
